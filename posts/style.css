@@ -56,13 +56,13 @@ h1 {
   position: relative;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   text-align: left;
 }
 
 .note p {
   margin: 0;
-  font-size: 18px;
+  font-size: 14px;
   color: #111827;
 }
 
@@ -70,7 +70,9 @@ h1 {
   position: absolute;
   top: 8px;
   right: 10px;
-  text-decoration: none;
+  background: none;
+  border: none;
   color: #ef4444;
   font-size: 16px;
+  cursor: pointer;
 }
