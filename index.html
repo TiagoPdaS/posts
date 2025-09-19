@@ -6,6 +6,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2563eb">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body class="bg-blue-50 min-h-screen min-w-screen w-full h-full">
   <div class="w-full h-full min-h-screen flex flex-col items-center justify-start p-2 sm:p-6">
@@ -24,7 +26,8 @@
           <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition">Adicionar</button>
         </div>
       </form>
-      <div id="notes" class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"></div>
+      
+      <div id="notes" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
   </div>
   <script src="script.js"></script>
