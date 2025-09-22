@@ -4,7 +4,13 @@ const prioritySelect = document.getElementById("prioritySelect");
 const notesContainer = document.getElementById("notesContainer");
 const sortSelect = document.getElementById("sortSelect");
 
-let notes = [];
+// Carregar notas do localStorage ou iniciar vazio
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+// Função para salvar no localStorage
+function saveNotes() {
+  localStorage.setItem("notes", JSON.stringify(notes));
+}
 
 // Função para renderizar notas
 function renderNotes() {
@@ -16,7 +22,7 @@ function renderNotes() {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     sortedNotes.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
   } else {
-    sortedNotes.sort((a, b) => a.date - b.date);
+    sortedNotes.sort((a, b) => new Date(a.date) - new Date(b.date));
   }
 
   sortedNotes.forEach((note, index) => {
@@ -24,7 +30,6 @@ function renderNotes() {
     noteDiv.className = `note p-3 rounded-lg shadow flex justify-between items-center ${note.priority}`;
 
     if (note.editing) {
-      // Modo edição inline
       noteDiv.innerHTML = `
         <input type="text" id="editInput-${index}" value="${note.text}" 
           class="flex-1 rounded-lg p-2 text-black" />
@@ -36,7 +41,6 @@ function renderNotes() {
         </div>
       `;
     } else {
-      // Modo visualização normal
       noteDiv.innerHTML = `
         <span class="flex-1">${note.text}</span>
         <div class="flex gap-2 ml-4">
@@ -50,6 +54,9 @@ function renderNotes() {
 
     notesContainer.appendChild(noteDiv);
   });
+
+  // Salvar sempre que renderizar
+  saveNotes();
 }
 
 // Adicionar nota
@@ -74,7 +81,7 @@ function deleteNote(index) {
   renderNotes();
 }
 
-// Editar nota (troca para modo edição)
+// Editar nota (modo edição)
 function editNote(index) {
   notes[index].editing = true;
   renderNotes();
@@ -96,5 +103,8 @@ function cancelEdit(index) {
   renderNotes();
 }
 
-// Ordenar quando mudar opção
+// Ordenar ao mudar opção
 sortSelect.addEventListener("change", renderNotes);
+
+// Renderizar notas ao iniciar
+renderNotes();
