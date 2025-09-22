@@ -2,84 +2,27 @@ body {
   font-family: Arial, sans-serif;
   background: #f3f4f6;
   margin: 0;
-  padding: 20px;
+  padding: 0;
 }
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  text-align: center;
-}
-
-h1 {
-  margin-bottom: 20px;
-  color: #1f2937;
-}
-
-.note-form {
-  margin-bottom: 20px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-/* Evita zoom ao focar em textarea/select/button no mobile */
-.note-form textarea,
-.note-form select,
-.note-form button {
-  font-size: 16px;
-}
-
-.note-form textarea {
-  width: 300px;
-  height: 60px;
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  resize: none;
-}
-
-.note-form select,
-.note-form button {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
+/* Seletor visual de cor */
+.color-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  display: inline-block;
   cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  vertical-align: middle;
 }
 
-.note-form button {
-  background: #2563eb;
-  color: white;
-  font-weight: bold;
+.color-radio:checked + .color-circle {
+  border-color: white;
+  box-shadow: 0 0 0 4px #bfdbfe;
 }
 
-.notes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-}
-
-.note {
-  position: relative;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  text-align: left;
-}
-
-.note p {
-  margin: 0;
-  font-size: 14px;
-  color: #111827;
-}
-
-.note .delete {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: #ef4444;
-  font-size: 16px;
-  cursor: pointer;
+#colorPicker label {
+  user-select: none;
 }
