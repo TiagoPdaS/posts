@@ -1,28 +1,26 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  margin: 0;
-  padding: 0;
+/* Background inteiro baseado na prioridade */
+.note.low {
+  background-color: #22c55e; /* Verde */
+  color: white;
 }
 
-/* Seletor visual de cor */
-.color-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  display: inline-block;
-  cursor: pointer;
-  transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  vertical-align: middle;
+.note.medium {
+  background-color: #eab308; /* Amarelo */
+  color: white;
 }
 
-.color-radio:checked + .color-circle {
-  border-color: white;
-  box-shadow: 0 0 0 4px #bfdbfe;
+.note.high {
+  background-color: #ef4444; /* Vermelho */
+  color: white;
 }
 
-#colorPicker label {
-  user-select: none;
+/* Corrigir as opções coloridas no select */
+#prioritySelect option[value="low"] {
+  color: #22c55e;
+}
+#prioritySelect option[value="medium"] {
+  color: #eab308;
+}
+#prioritySelect option[value="high"] {
+  color: #ef4444;
 }
