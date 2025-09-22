@@ -1,88 +1,100 @@
-const form = document.getElementById("noteForm");
+const noteForm = document.getElementById("noteForm");
 const noteInput = document.getElementById("noteInput");
-const colorInput = document.getElementById("colorInput");
-const notesContainer = document.getElementById("notes");
+const prioritySelect = document.getElementById("prioritySelect");
+const notesContainer = document.getElementById("notesContainer");
+const sortSelect = document.getElementById("sortSelect");
 
-let notes = JSON.parse(localStorage.getItem("notes")) || [];
+let notes = [];
 
+// Função para renderizar notas
 function renderNotes() {
   notesContainer.innerHTML = "";
-  notes.forEach(note => {
-    const div = document.createElement("div");
-    div.className =
-      "relative p-4 rounded-xl shadow-md text-left min-h-[80px] flex flex-col justify-between transition hover:scale-[1.02]";
-    div.style.backgroundColor = note.color;
-    if (note.done) {
-      div.className += " opacity-60";
-    }
 
-    div.innerHTML = `
-      <div class="flex items-start gap-2">
-        <input type="checkbox" class="done-checkbox mt-1" ${note.done ? "checked" : ""} title="Marcar como concluída">
-        <p class="mb-2 text-gray-800 break-words flex-1 ${note.done ? "line-through" : ""}">${note.text}</p>
-      </div>
-      <div class="absolute top-2 right-2 flex gap-1">
-        <button class="edit bg-white/80 hover:bg-blue-100 text-blue-500 rounded-full p-1 transition" title="Editar nota">✎</button>
-        <button class="delete bg-white/80 hover:bg-red-100 text-red-500 rounded-full p-1 transition" title="Excluir nota">✖</button>
-      </div>
-    `;
+  let sortedNotes = [...notes];
 
-    // Checkbox de concluído
-    div.querySelector(".done-checkbox").addEventListener("change", (e) => {
-      note.done = e.target.checked;
-      localStorage.setItem("notes", JSON.stringify(notes));
-      renderNotes();
-    });
+  if (sortSelect.value === "priority") {
+    const priorityOrder = { high: 1, medium: 2, low: 3 };
+    sortedNotes.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+  } else {
+    sortedNotes.sort((a, b) => a.date - b.date);
+  }
 
-    // Excluir nota
-    div.querySelector(".delete").addEventListener("click", () => {
-      notes = notes.filter(n => n.id !== note.id);
-      localStorage.setItem("notes", JSON.stringify(notes));
-      renderNotes();
-    });
+  sortedNotes.forEach((note, index) => {
+    const noteDiv = document.createElement("div");
+    noteDiv.className = `note p-3 rounded-lg shadow flex justify-between items-center ${note.priority}`;
 
-    // Editar nota
-    div.querySelector(".edit").addEventListener("click", () => {
-      div.innerHTML = `
-        <textarea class="w-full rounded-lg border border-gray-300 p-2 mb-2 resize-none" style="font-size:16px;">${note.text}</textarea>
-        <div class="flex gap-2">
-          <button class="save bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded transition">Salvar</button>
-          <button class="cancel bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-3 py-1 rounded transition">Cancelar</button>
+    if (note.editing) {
+      // Modo edição inline
+      noteDiv.innerHTML = `
+        <input type="text" id="editInput-${index}" value="${note.text}" 
+          class="flex-1 rounded-lg p-2 text-black" />
+        <div class="flex gap-2 ml-4">
+          <button class="bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded-md text-sm"
+            onclick="saveEdit(${index})">💾 Salvar</button>
+          <button class="bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded-md text-sm"
+            onclick="cancelEdit(${index})">❌ Cancelar</button>
         </div>
       `;
-      const textarea = div.querySelector("textarea");
-      textarea.focus();
+    } else {
+      // Modo visualização normal
+      noteDiv.innerHTML = `
+        <span class="flex-1">${note.text}</span>
+        <div class="flex gap-2 ml-4">
+          <button class="bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded-md text-sm"
+            onclick="editNote(${index})">✏️ Editar</button>
+          <button class="bg-white/20 hover:bg-white/30 text-white px-2 py-1 rounded-md text-sm"
+            onclick="deleteNote(${index})">🗑️ Excluir</button>
+        </div>
+      `;
+    }
 
-      div.querySelector(".save").addEventListener("click", () => {
-        const newText = textarea.value.trim();
-        if (newText) {
-          note.text = newText;
-          localStorage.setItem("notes", JSON.stringify(notes));
-          renderNotes();
-        }
-      });
-
-      div.querySelector(".cancel").addEventListener("click", () => {
-        renderNotes();
-      });
-    });
-
-    notesContainer.appendChild(div);
+    notesContainer.appendChild(noteDiv);
   });
 }
 
-form.addEventListener("submit", (e) => {
+// Adicionar nota
+noteForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
   const newNote = {
-    id: Date.now(),
     text: noteInput.value,
-    color: colorInput.value,
-    done: false
+    priority: prioritySelect.value,
+    date: new Date(),
+    editing: false
   };
+
   notes.push(newNote);
-  localStorage.setItem("notes", JSON.stringify(notes));
   noteInput.value = "";
   renderNotes();
 });
 
-renderNotes();
+// Excluir nota
+function deleteNote(index) {
+  notes.splice(index, 1);
+  renderNotes();
+}
+
+// Editar nota (troca para modo edição)
+function editNote(index) {
+  notes[index].editing = true;
+  renderNotes();
+}
+
+// Salvar edição
+function saveEdit(index) {
+  const input = document.getElementById(`editInput-${index}`);
+  if (input.value.trim() !== "") {
+    notes[index].text = input.value.trim();
+    notes[index].editing = false;
+    renderNotes();
+  }
+}
+
+// Cancelar edição
+function cancelEdit(index) {
+  notes[index].editing = false;
+  renderNotes();
+}
+
+// Ordenar quando mudar opção
+sortSelect.addEventListener("change", renderNotes);

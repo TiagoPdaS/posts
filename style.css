@@ -1,85 +1,26 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  margin: 0;
-  padding: 20px;
-}
-
-.container {
-  max-width: 800px;
-  margin: auto;
-  text-align: center;
-}
-
-h1 {
-  margin-bottom: 20px;
-  color: #1f2937;
-}
-
-.note-form {
-  margin-bottom: 20px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-/* Evita zoom ao focar em textarea/select/button no mobile */
-.note-form textarea,
-.note-form select,
-.note-form button {
-  font-size: 16px;
-}
-
-.note-form textarea {
-  width: 300px;
-  height: 60px;
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  resize: none;
-}
-
-.note-form select,
-.note-form button {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-.note-form button {
-  background: #2563eb;
+/* Background inteiro baseado na prioridade */
+.note.low {
+  background-color: #22c55e; /* Verde */
   color: white;
-  font-weight: bold;
 }
 
-.notes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
+.note.medium {
+  background-color: #eab308; /* Amarelo */
+  color: white;
 }
 
-.note {
-  position: relative;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  text-align: left;
+.note.high {
+  background-color: #ef4444; /* Vermelho */
+  color: white;
 }
 
-.note p {
-  margin: 0;
-  font-size: 14px;
-  color: #111827;
+/* Corrigir as opções coloridas no select */
+#prioritySelect option[value="low"] {
+  color: #22c55e;
 }
-
-.note .delete {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  background: none;
-  border: none;
+#prioritySelect option[value="medium"] {
+  color: #eab308;
+}
+#prioritySelect option[value="high"] {
   color: #ef4444;
-  font-size: 16px;
-  cursor: pointer;
 }
